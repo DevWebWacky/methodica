@@ -73,7 +73,7 @@ function ResearchForm({ onResults, setLoading }) {
   }
 
   return (
-    <section id="research-form" className="py-16 px-6 bg-slate-50">
+    <section id="research-form" className="py-10 md:py-16 px-4 md:px-6 bg-slate-50">
       <div className="max-w-3xl mx-auto">
 
         <div className="text-center mb-10">
@@ -86,8 +86,7 @@ function ResearchForm({ onResults, setLoading }) {
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl p-8 
-        border border-gray-100">
+        <div className="bg-white rounded-3xl shadow-2xl p-5 md:p-8 border border-gray-100">
 
           <div className="flex items-center gap-2 mb-8">
             <div className="h-1 flex-1 bg-slate-700 rounded-full"></div>

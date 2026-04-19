@@ -140,3 +140,12 @@ input:focus, textarea:focus, select:focus {
   opacity: 0;
   animation: cardFadeIn 0.6s ease 0.6s forwards;
 }
+
+/* Mobile responsiveness fixes */
+@media (max-width: 640px) {
+  .typewriter {
+    animation: none;
+    border-right: none;
+    white-space: normal;
+  }
+}

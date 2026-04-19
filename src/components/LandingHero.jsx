@@ -36,12 +36,14 @@ function LandingHero() {
   }, [])
 
   return (
-    <section className="relative bg-slate-900 text-white py-24 px-6 overflow-hidden">
+    <section className="relative bg-slate-900 text-white 
+    py-16 md:py-24 px-4 md:px-6 overflow-hidden">
 
       {/* Background circles */}
-      <div className="absolute top-[-80px] left-[-80px] w-96 h-96 bg-slate-700 rounded-full opacity-20 animate-pulse"></div>
-      <div className="absolute bottom-[-60px] right-[-60px] w-72 h-72 bg-blue-900 rounded-full opacity-20 animate-pulse"></div>
-      <div className="absolute top-10 right-20 w-40 h-40 bg-teal-900 rounded-full opacity-10 animate-pulse"></div>
+      <div className="absolute top-[-80px] left-[-80px] w-96 h-96
+      bg-slate-700 rounded-full opacity-20 animate-pulse"></div>
+      <div className="absolute bottom-[-60px] right-[-60px] w-72 h-72
+      bg-blue-900 rounded-full opacity-20 animate-pulse"></div>
 
       {/* Grid pattern */}
       <div className="absolute inset-0 opacity-5"
@@ -55,46 +57,75 @@ function LandingHero() {
       <div className="relative max-w-4xl mx-auto text-center z-10">
 
         {/* Badge */}
-        <div className="fade-slide-up inline-block bg-slate-800 border border-slate-600 text-slate-300 text-xs font-semibold px-4 py-1 rounded-full mb-6 tracking-widest uppercase">
-          ✦ AI-Powered Research Assistant
+        <div className="fade-slide-up inline-block bg-slate-800
+        border border-slate-600 text-slate-300 text-xs font-semibold
+        px-3 py-1 rounded-full mb-6 tracking-widest uppercase">
+          AI-Powered Research Assistant
         </div>
 
-        {/* Typewriter headline */}
-        <div className="mb-6 flex justify-center">
-          <h2 className="typewriter text-4xl font-black leading-tight text-white">
+        {/* Headline — typewriter on desktop, static on mobile */}
+        <div className="mb-6">
+          {/* Mobile version — no typewriter */}
+          <h2 className="block md:hidden text-2xl font-black 
+          leading-tight text-white px-2">
             Design Your Research With Confidence
           </h2>
+          {/* Desktop version — typewriter effect */}
+          <div className="hidden md:flex justify-center">
+            <h2 className="typewriter text-4xl font-black 
+            leading-tight text-white">
+              Design Your Research With Confidence
+            </h2>
+          </div>
         </div>
 
         {/* Subheadline */}
-        <p className="fade-slide-up-delay-1 text-lg text-slate-300 mb-4 max-w-2xl mx-auto leading-relaxed">
+        <p className="fade-slide-up-delay-1 text-sm md:text-lg 
+        text-slate-300 mb-4 max-w-2xl mx-auto leading-relaxed px-2">
           Not sure which study design, sampling technique, or sample
           size is right for your research? Methodica analyses your
-          inputed details and gives you accurate, justified recommendations —
+          topic and gives you accurate, justified recommendations
           instantly.
         </p>
 
         {/* Who it's for */}
-        <p className="fade-slide-up-delay-2 text-sm text-slate-400 mb-10 tracking-wide">
+        <p className="fade-slide-up-delay-2 text-xs md:text-sm 
+        text-slate-400 mb-8 md:mb-10 tracking-wide px-2">
           Built for undergraduate students, postgraduate researchers
-          & biomedical scientists
+          and biomedical scientists
         </p>
 
         {/* Animated Stats */}
-        <div className="fade-slide-up-delay-3 flex justify-center gap-10 mb-10">
+        <div className="fade-slide-up-delay-3 flex justify-center
+        gap-4 md:gap-10 mb-8 md:mb-10">
           <div className="text-center">
-            <p className="text-4xl font-black text-white">{count1}</p>
-            <p className="text-xs text-slate-400 uppercase tracking-wider mt-1">Key Outputs</p>
+            <p className="text-2xl md:text-4xl font-black text-white">
+              {count1}
+            </p>
+            <p className="text-xs text-slate-400 uppercase 
+            tracking-wider mt-1">
+              Key Outputs
+            </p>
           </div>
           <div className="w-px bg-slate-700"></div>
           <div className="text-center">
-            <p className="text-4xl font-black text-white">{count2}+</p>
-            <p className="text-xs text-slate-400 uppercase tracking-wider mt-1">Biomedical Fields</p>
+            <p className="text-2xl md:text-4xl font-black text-white">
+              {count2}+
+            </p>
+            <p className="text-xs text-slate-400 uppercase 
+            tracking-wider mt-1">
+              Fields
+            </p>
           </div>
           <div className="w-px bg-slate-700"></div>
           <div className="text-center">
-            <p className="text-4xl font-black text-white">{count3}%</p>
-            <p className="text-xs text-slate-400 uppercase tracking-wider mt-1">Free to Use</p>
+            <p className="text-2xl md:text-4xl font-black text-white">
+              {count3}%
+            </p>
+            <p className="text-xs text-slate-400 uppercase 
+            tracking-wider mt-1">
+              Free
+            </p>
           </div>
         </div>
 
@@ -102,10 +133,11 @@ function LandingHero() {
         <div className="fade-slide-up-delay-4">
           
             <a href="#research-form"
-            className="glow-pulse inline-block bg-blue-600 hover:bg-blue-500
-            text-white font-black px-10 py-4 rounded-full shadow-2xl text-lg
+            className="glow-pulse inline-block bg-blue-600
+            hover:bg-blue-500 text-white font-black px-8 md:px-10
+            py-3 md:py-4 rounded-full shadow-2xl text-base md:text-lg
             hover:scale-105 transition-all duration-300">
-            Get Started →
+            Get Started
           </a>
         </div>
 
