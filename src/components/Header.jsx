@@ -9,7 +9,7 @@ function Header() {
         <img
           src="/methodica-logo.png"
           alt="Methodica Logo"
-          className="h-30 md:h-40 object-contain"
+          className="h-20 md:h-40 object-contain"
         />
 
       </div>
