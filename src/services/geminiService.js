@@ -3,9 +3,9 @@
 // free AI models through one API — much more reliable
 // than using Gemini directly!!
 
-const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 
-const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`
 
 export async function generateRecommendations(formData) {
 
@@ -139,47 +139,38 @@ Important rules:
       console.log(`Attempt ${attempt} of ${maxRetries}...`)
 
       const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_KEY}`,
-          'HTTP-Referer': 'https://methodica-beta.vercel.app',
-          'X-Title': 'Methodica'
-        },
-        body: JSON.stringify({
-          // This is a free model on OpenRouter!!
-          model: 'meta-llama/llama-3.3-70b-instruct:free',
-          messages: [
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          temperature: 0.1,
-          max_tokens: 16000,
-        })
-      })
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    contents: [{
+      parts: [{ text: prompt }]
+    }],
+    generationConfig: {
+      temperature: 0.1,
+      maxOutputTokens: 65536,
+    }
+  })
+})
 
-      const data = await response.json()
-      console.log('API Response:', data)
+const data = await response.json()
 
-      if (response.status === 503 || response.status === 429) {
-        console.log(`Overloaded, retrying in ${3 * attempt} seconds...`)
-        await new Promise(resolve => setTimeout(resolve, 3000 * attempt))
-        continue
-      }
+if (response.status === 503 || response.status === 429) {
+  console.log(`Overloaded, retrying...`)
+  await new Promise(resolve => setTimeout(resolve, 3000 * attempt))
+  continue
+}
 
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`)
-      }
+if (!response.ok) {
+  throw new Error(`API Error: ${response.status}`)
+}
 
-      const text = data.choices[0].message.content
-      console.log('Raw response:', text)
+const text = data.candidates[0].content.parts[0].text
+const cleaned = text.replace(/```json|```/g, '').trim()
+const result = JSON.parse(cleaned)
 
-      const cleaned = text.replace(/```json|```/g, '').trim()
-      const result = JSON.parse(cleaned)
-
-      return result
+return result
 
     } catch (err) {
       console.error(`Attempt ${attempt} failed:`, err)
