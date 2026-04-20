@@ -137,7 +137,7 @@ Important rules:
         }],
         generationConfig: {
           temperature: 0.1,
-          maxOutputTokens: 20000,
+          maxOutputTokens: 28000,
         }
       })
     })
