@@ -125,37 +125,59 @@ Important rules:
 - Be consistent and deterministic
 `
 
-  try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{ text: prompt }]
-        }],
-        generationConfig: {
-          temperature: 0.1,
-          maxOutputTokens: 65536,
-        }
+  const maxRetries = 3
+  let lastError
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`Attempt ${attempt} of ${maxRetries}...`)
+
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: prompt }]
+          }],
+          generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 65536,
+          }
+        })
       })
-    })
 
-    const data = await response.json()
+      const data = await response.json()
 
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`)
+      // If overloaded wait and retry
+      if (response.status === 503 || response.status === 429) {
+        console.log(`API overloaded, waiting before retry...`)
+        await new Promise(resolve => setTimeout(resolve, 3000 * attempt))
+        continue
+      }
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`)
+      }
+
+      const text = data.candidates[0].content.parts[0].text
+      const cleaned = text.replace(/```json|```/g, '').trim()
+      const result = JSON.parse(cleaned)
+
+      return result
+
+    } catch (err) {
+      console.error(`Attempt ${attempt} failed:`, err)
+      lastError = err
+
+      // Wait before retrying
+      if (attempt < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, 3000 * attempt))
+      }
     }
-
-    const text = data.candidates[0].content.parts[0].text
-    const cleaned = text.replace(/```json|```/g, '').trim()
-    const result = JSON.parse(cleaned)
-
-    return result
-
-  } catch (err) {
-    console.error('Detailed error:', err)
-    throw err
   }
+
+  throw lastError
+  
 }

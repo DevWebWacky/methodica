@@ -65,7 +65,7 @@ function ResearchForm({ onResults, setLoading }) {
 
 
     } catch (err) {
-      setError('❌ Something went wrong. Please check your internet connection and try again.')
+      setError('❌ Methodica could not connect to the AI service. This is usually temporary — please wait a moment and try again.')
     } finally {
       // Hide loading screen whether it succeeded or failed
       setLoading(false)
