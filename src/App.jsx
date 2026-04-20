@@ -15,6 +15,7 @@ function App() {
   const [studiesLoading, setStudiesLoading] = useState(false)
   const [formData, setFormData] = useState(null)
   const [validationError, setValidationError] = useState(null)
+  const [showFeedback, setShowFeedback] = useState(false)
 
   // Track session on first load
   useEffect(() => {
@@ -30,6 +31,10 @@ function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
+    // Show feedback popup after 30 seconds
+setTimeout(() => {
+  setShowFeedback(true)
+}, 30000)
 
     // Clear any previous validation error
     setValidationError(null)
@@ -497,7 +502,59 @@ function App() {
         </>
       )}
 
+      {/* Feedback Popup */}
+{showFeedback && (
+  <div className="fixed bottom-6 right-6 z-50 max-w-sm
+  bg-white rounded-3xl shadow-2xl border border-gray-100
+  p-6 animate-bounce-once">
+
+    {/* Close button */}
+    <button
+      onClick={() => setShowFeedback(false)}
+      className="absolute top-3 right-4 text-gray-400
+      hover:text-gray-600 text-xl font-bold">
+      x
+    </button>
+
+    {/* Icon */}
+    <div className="text-4xl mb-3">💬</div>
+
+    {/* Message */}
+    <h3 className="text-base font-black text-slate-800 mb-2">
+      Enjoying Methodica?
+    </h3>
+    <p className="text-xs text-gray-500 leading-relaxed mb-4">
+      Your feedback helps us improve Methodica for
+      biomedical students and researchers worldwide.
+      It takes less than 2 minutes! 🙏
+    </p>
+
+    {/* Buttons */}
+    <div className="flex gap-3">
+      
+        <a href="https://forms.gle/27fcoWt1BtHfoDmn9"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => setShowFeedback(false)}
+        className="flex-1 bg-blue-600 hover:bg-blue-500
+        text-white text-xs font-black py-2 rounded-xl
+        text-center transition-all duration-300">
+        Give Feedback
+      </a>
+      <button
+        onClick={() => setShowFeedback(false)}
+        className="flex-1 bg-gray-100 hover:bg-gray-200
+        text-gray-600 text-xs font-bold py-2 rounded-xl
+        transition-all duration-300">
+        Maybe Later
+      </button>
     </div>
+
+  </div>
+)}
+
+    </div>
+
   )
 }
 

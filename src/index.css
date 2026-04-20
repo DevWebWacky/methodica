@@ -149,3 +149,19 @@ input:focus, textarea:focus, select:focus {
     white-space: normal;
   }
 }
+
+/* Feedback popup slide in */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-bounce-once {
+  animation: slideInUp 0.5s ease forwards;
+}
