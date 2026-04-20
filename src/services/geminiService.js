@@ -1,6 +1,11 @@
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
+// geminiService.js
+// Now using OpenRouter which gives access to multiple
+// free AI models through one API — much more reliable
+// than using Gemini directly!!
 
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`
+const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY
+
+const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
 export async function generateRecommendations(formData) {
 
@@ -23,7 +28,8 @@ If ANY of these validations fail, you MUST return ONLY this JSON:
 }
 
 STEP 2 — RECOMMENDATIONS:
-If all validations pass, return ONLY this JSON with no extra text:
+If all validations pass, return ONLY this JSON with no extra text
+and no markdown backticks:
 {
   "valid": true,
   "studyDesign": {
@@ -56,7 +62,7 @@ If all validations pass, return ONLY this JSON with no extra text:
     ],
     "dataManagementSteps": [
       {
-        "step": "Step number as integer",
+        "step": 1,
         "title": "Step title",
         "description": "What to do in this step"
       }
@@ -136,23 +142,29 @@ Important rules:
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${API_KEY}`,
+          'HTTP-Referer': 'https://methodica-beta.vercel.app',
+          'X-Title': 'Methodica'
         },
         body: JSON.stringify({
-          contents: [{
-            parts: [{ text: prompt }]
-          }],
-          generationConfig: {
-            temperature: 0.1,
-            maxOutputTokens: 65536,
-          }
+          // This is a free model on OpenRouter!!
+          model: 'meta-llama/llama-3.3-70b-instruct:free',
+          messages: [
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.1,
+          max_tokens: 16000,
         })
       })
 
       const data = await response.json()
+      console.log('API Response:', data)
 
-      // If overloaded wait and retry
       if (response.status === 503 || response.status === 429) {
-        console.log(`API overloaded, waiting before retry...`)
+        console.log(`Overloaded, retrying in ${3 * attempt} seconds...`)
         await new Promise(resolve => setTimeout(resolve, 3000 * attempt))
         continue
       }
@@ -161,7 +173,9 @@ Important rules:
         throw new Error(`API Error: ${response.status}`)
       }
 
-      const text = data.candidates[0].content.parts[0].text
+      const text = data.choices[0].message.content
+      console.log('Raw response:', text)
+
       const cleaned = text.replace(/```json|```/g, '').trim()
       const result = JSON.parse(cleaned)
 
@@ -170,8 +184,6 @@ Important rules:
     } catch (err) {
       console.error(`Attempt ${attempt} failed:`, err)
       lastError = err
-
-      // Wait before retrying
       if (attempt < maxRetries) {
         await new Promise(resolve => setTimeout(resolve, 3000 * attempt))
       }
@@ -179,5 +191,4 @@ Important rules:
   }
 
   throw lastError
-  
 }
