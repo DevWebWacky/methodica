@@ -78,6 +78,9 @@ setTimeout(() => {
           <p className="text-slate-300 text-sm mb-6">
             Methodica is generating your recommendations
           </p>
+          <p className="text-slate-400 text-xs mb-6">
+  Complex research may take up to 60 seconds
+</p>
           <div className="w-64 h-2 bg-slate-700 rounded-full overflow-hidden">
             <div className="h-full bg-blue-500 rounded-full animate-pulse w-3/4"></div>
           </div>

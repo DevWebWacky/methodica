@@ -1,8 +1,3 @@
-// geminiService.js
-// Now using OpenRouter which gives access to multiple
-// free AI models through one API — much more reliable
-// than using Gemini directly!!
-
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`
@@ -131,52 +126,77 @@ Important rules:
 - Be consistent and deterministic
 `
 
-  const maxRetries = 3
+  const maxRetries = 4
   let lastError
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       console.log(`Attempt ${attempt} of ${maxRetries}...`)
 
+      // ── INCREASED TIMEOUT ──
+      // We use AbortController to set a 120 second timeout
+      // This gives Gemini enough time to process large inputs
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => {
+        controller.abort()
+      }, 180000) // 120 seconds timeout
+
       const response = await fetch(API_URL, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    contents: [{
-      parts: [{ text: prompt }]
-    }],
-    generationConfig: {
-      temperature: 0.1,
-      maxOutputTokens: 65536,
-    }
-  })
-})
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        signal: controller.signal, // Attach timeout signal
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: prompt }]
+          }],
+          generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 65536,
+          }
+        })
+      })
 
-const data = await response.json()
+      // Clear timeout once response arrives
+      clearTimeout(timeoutId)
 
-if (response.status === 503 || response.status === 429) {
-  console.log(`Overloaded, retrying...`)
-  await new Promise(resolve => setTimeout(resolve, 3000 * attempt))
-  continue
-}
+      const data = await response.json()
+      console.log('Response status:', response.status)
 
-if (!response.ok) {
-  throw new Error(`API Error: ${response.status}`)
-}
+      // Handle overload — wait longer each retry
+      if (response.status === 503 || response.status === 429) {
+        const waitTime = 5000 * attempt
+        console.log(`Overloaded, waiting ${waitTime/1000}s before retry...`)
+        await new Promise(resolve => setTimeout(resolve, waitTime))
+        continue
+      }
 
-const text = data.candidates[0].content.parts[0].text
-const cleaned = text.replace(/```json|```/g, '').trim()
-const result = JSON.parse(cleaned)
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`)
+      }
 
-return result
+      const text = data.candidates[0].content.parts[0].text
+      const cleaned = text.replace(/```json|```/g, '').trim()
+      const result = JSON.parse(cleaned)
+
+      return result
 
     } catch (err) {
-      console.error(`Attempt ${attempt} failed:`, err)
-      lastError = err
+      // Handle timeout specifically
+      if (err.name === 'AbortError') {
+        console.log(`Attempt ${attempt} timed out — retrying...`)
+        lastError = new Error('Request timed out — retrying')
+      } else {
+        console.error(`Attempt ${attempt} failed:`, err)
+        lastError = err
+      }
+
+      // Wait before retrying — longer each time
       if (attempt < maxRetries) {
-        await new Promise(resolve => setTimeout(resolve, 3000 * attempt))
+        const waitTime = 5000 * attempt
+        console.log(`Waiting ${waitTime/1000}s before next attempt...`)
+        await new Promise(resolve => setTimeout(resolve, waitTime))
       }
     }
   }
