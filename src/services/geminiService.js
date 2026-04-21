@@ -5,7 +5,7 @@ const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-
 export async function generateRecommendations(formData) {
 
   // Only include journals for Masters, PhD and Researchers
-  const includeJournals = ['PhD / Doctorate', 'Researcher / Academic']
+  const includeJournals = ['Masters', 'PhD / Doctorate', 'Researcher / Academic']
     .includes(formData.educationLevel)
 
   const journalInstruction = includeJournals ? `

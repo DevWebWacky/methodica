@@ -385,7 +385,7 @@ border-l-4 border-pink-500 card-fade-in-4">
           {/* Journals */}
           {results.journals && 
 results.journals.length > 0 && 
-['PhD / Doctorate', 'Researcher / Academic']
+['Masters', 'PhD / Doctorate', 'Researcher / Academic']
 .includes(formData?.educationLevel) && (
             <div className="bg-white rounded-3xl shadow-lg p-6 mb-6
             border-l-4 border-blue-400">
