@@ -200,39 +200,52 @@ setTimeout(() => {
             </p>
           </div>
 
-          {/* Statistical Tests */}
-          <div className="bg-white rounded-3xl shadow-lg p-6 mb-6
-          border-l-4 border-pink-500 card-fade-in-4">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">📐</span>
-              <h3 className="text-lg font-black text-slate-800">
-                Recommended Statistical Tests
-              </h3>
-            </div>
-            <p className="text-xs text-gray-400 mb-4">
-              Based on your objectives and hypotheses:
-            </p>
-            <div className="space-y-4">
-              {results.statisticalTests.map((item, index) => (
-                <div key={index} className="bg-pink-50 rounded-2xl p-4
-                border border-pink-100">
-                  <p className="text-xs font-bold text-pink-400
-                  uppercase tracking-wider mb-1">
-                    Objective {index + 1}
-                  </p>
-                  <p className="text-xs text-gray-500 mb-2 italic">
-                    {item.objective}
-                  </p>
-                  <p className="text-pink-700 font-black text-lg mb-2">
-                    {item.test}
-                  </p>
-                  <p className="text-gray-600 text-xs leading-relaxed">
-                    {item.justification}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Statistical Tests Card */}
+<div className="bg-white rounded-3xl shadow-lg p-6 mb-6
+border-l-4 border-pink-500 card-fade-in-4">
+  <div className="flex items-center gap-2 mb-3">
+    <span className="text-2xl">📐</span>
+    <h3 className="text-lg font-black text-slate-800">
+      Recommended Statistical Tests
+    </h3>
+  </div>
+  <p className="text-xs text-gray-400 mb-4">
+    Based on your objectives and hypotheses. Descriptive
+    statistics are always included as the essential first step:
+  </p>
+  <div className="space-y-4">
+    {results.statisticalTests.map((item, index) => (
+      <div key={index} className={`rounded-2xl p-4 border
+      ${item.isDescriptive
+        ? 'bg-cyan-50 border-cyan-200'
+        : 'bg-pink-50 border-pink-100'
+      }`}>
+        {item.isDescriptive && (
+          <span className="text-xs font-bold text-cyan-600
+          uppercase tracking-wider bg-cyan-100 px-2 py-1
+          rounded-full mb-2 inline-block">
+            Default First Step
+          </span>
+        )}
+        <p className="text-xs font-bold uppercase tracking-wider
+        mb-1 mt-1
+        ${item.isDescriptive ? 'text-cyan-400' : 'text-pink-400'}">
+          {item.isDescriptive ? 'Descriptive Statistics' : `Objective ${index}`}
+        </p>
+        <p className="text-xs text-gray-500 mb-2 italic">
+          {item.objective}
+        </p>
+        <p className={`font-black text-lg mb-2
+        ${item.isDescriptive ? 'text-cyan-700' : 'text-pink-700'}`}>
+          {item.test}
+        </p>
+        <p className="text-gray-600 text-xs leading-relaxed">
+          {item.justification}
+        </p>
+      </div>
+    ))}
+  </div>
+</div>
 
           {/* Data Collection */}
           {results.dataCollection && (
@@ -299,43 +312,6 @@ setTimeout(() => {
             </div>
           )}
 
-          {/* Descriptive Statistics */}
-          {results.descriptiveStatistics && (
-            <div className="bg-white rounded-3xl shadow-lg p-6 mb-6
-            border-l-4 border-cyan-500">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-2xl">📊</span>
-                <h3 className="text-lg font-black text-slate-800">
-                  Descriptive Statistics
-                </h3>
-              </div>
-              <div className="bg-cyan-50 rounded-xl p-3 mb-4
-              border border-cyan-100">
-                <p className="text-xs text-cyan-700 leading-relaxed">
-                  {results.descriptiveStatistics.explanation}
-                </p>
-              </div>
-              <div className="grid grid-cols-1 gap-2">
-                {results.descriptiveStatistics.recommended.map((item, index) => (
-                  <div key={index} className="flex items-start gap-3
-                  p-3 bg-gray-50 rounded-xl">
-                    <span className="text-cyan-500 font-black
-                    text-sm flex-shrink-0">
-                      {index + 1}.
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-slate-800">
-                        {item.measure}
-                      </p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        {item.reason}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Software Recommendations */}
           {results.softwareRecommendations && (
@@ -407,7 +383,10 @@ setTimeout(() => {
           )}
 
           {/* Journals */}
-          {results.journals && results.journals.length > 0 && (
+          {results.journals && 
+results.journals.length > 0 && 
+['PhD / Doctorate', 'Researcher / Academic']
+.includes(formData?.educationLevel) && (
             <div className="bg-white rounded-3xl shadow-lg p-6 mb-6
             border-l-4 border-blue-400">
               <div className="flex items-center gap-2 mb-3">
