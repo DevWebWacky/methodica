@@ -4,7 +4,7 @@
 
 /* Apply Montserrat globally */
 * {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', 'Lora', serif;
 }
 
 /* Smooth scrolling */

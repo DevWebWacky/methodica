@@ -82,9 +82,8 @@ function LandingHero() {
         {/* Subheadline */}
         <p className="fade-slide-up-delay-1 text-sm md:text-lg 
         text-slate-300 mb-4 max-w-2xl mx-auto leading-relaxed px-2">
-          Not sure which study design, sampling technique, or sample
-          size is right for your research? Methodica analyses your
-          topic and gives you accurate, justified recommendations
+          Not sure which study design, sampling technique, sample size, analysis, tools are right for your research?
+          Methodica analyses your details and gives you justified recommendations
           instantly.
         </p>
 

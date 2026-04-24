@@ -82,7 +82,7 @@ function ResearchForm({ onResults, setLoading }) {
           </h2>
           <p className="text-gray-500 text-sm max-w-xl mx-auto">
             Fill in the details below and Methodica will generate 
-            accurate recommendations for your study.
+            recommendations for your study.
           </p>
         </div>
 
@@ -122,7 +122,7 @@ function ResearchForm({ onResults, setLoading }) {
             </label>
             <div className="bg-blue-50 border border-blue-200 rounded-xl
             p-3 mb-2 text-xs text-blue-700">
-              💡 <strong>Tip:</strong> The more specific your objectives, 
+              <strong>Tip:</strong> The more specific your objectives, 
               the more accurate your recommendations. Example: "1. To 
               determine the prevalence of malaria among children under 5. 
               2. To compare infection rates between rural and urban areas."
@@ -147,7 +147,7 @@ function ResearchForm({ onResults, setLoading }) {
   </label>
   <div className="bg-purple-50 border border-purple-200 rounded-xl
   p-3 mb-2 text-xs text-purple-700">
-    💡 <strong>What is a hypothesis?</strong> A hypothesis is a 
+    <strong>What is a hypothesis?</strong> A hypothesis is a 
     predictive statement about the expected relationship or difference 
     in your study. It helps determine the most appropriate statistical 
     test. Example: "H₀: There is no significant difference in HBsAg 
@@ -233,7 +233,7 @@ function ResearchForm({ onResults, setLoading }) {
   </label>
   <div className="bg-slate-50 border border-slate-200 rounded-xl
   p-3 mb-3 text-xs text-slate-600">
-    💡 <strong>Why this matters:</strong> Your level of education
+    <strong>Why this matters:</strong> Your level of education
     determines the complexity of statistical analysis, study design,
     and methodology expected in your research. A PhD study is held
     to a higher methodological standard than an undergraduate project.
@@ -387,7 +387,7 @@ function ResearchForm({ onResults, setLoading }) {
             </label>
             <div className="bg-yellow-50 border border-yellow-300 
             rounded-xl p-3 mb-3 text-xs text-yellow-700">
-              💡 <strong>Why this matters:</strong> Your outcome variable 
+              <strong>Why this matters:</strong> Your outcome variable 
               type directly determines which sample size formula is used. 
               Selecting the wrong type will give you an inaccurate sample 
               size — affecting the validity of your entire study.
@@ -456,7 +456,7 @@ function ResearchForm({ onResults, setLoading }) {
               <span className="text-red-500"> *</span>
             </label>
             <p className="text-xs text-gray-500 mb-2 leading-relaxed">
-              💡 How certain do you want your results to be? 
+              How certain do you want your results to be? 
               <strong> 95% is the standard</strong> in most biomedical 
               research — meaning if you repeated the study 100 times, 
               95 of those results would be correct.
