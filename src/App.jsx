@@ -8,6 +8,7 @@ import ExportButton from './components/ExportButton'
 import { searchSimilarStudies } from './services/pubmedService'
 import { trackSession, trackAnalysis } from './services/analyticsService'
 import { supabase } from './services/supabaseClient'
+import ChatPanel from './components/ChatPanel'
 
 function App() {
   const [results, setResults] = useState(null)
@@ -509,6 +510,14 @@ results.journals.length > 0 &&
               {results.additionalRecommendations}
             </p>
           </div>
+
+          {/* Chat Panel */}
+          <ChatPanel
+            results={results}
+            formData={formData}
+            user={user}
+            recommendationId={savedRecommendationId}
+          />
 
           {/* Similar Studies */}
           <SimilarStudies
