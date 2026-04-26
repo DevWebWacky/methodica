@@ -80,12 +80,6 @@ function App() {
     setShowDashboard(false)
   }
 
-  function handleViewRecommendation(rec) {
-    setResults(rec.results)
-    setFormData(rec.form_data)
-    setSavedRecommendationId(rec.id)
-  }
-
   function handleViewSavedRecommendation(rec) {
     setResults(rec.results)
     setFormData(rec.form_data)
