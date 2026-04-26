@@ -494,7 +494,7 @@ function ResearchForm({ onResults, setLoading }) {
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-4">
-          🔒 Your data is never stored. Results are generated instantly.
+          🔒 Results are generated instantly.
         </p>
 
       </div>
