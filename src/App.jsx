@@ -7,6 +7,7 @@ import AnalyticsDashboard from './components/AnalyticsDashboard'
 import ExportButton from './components/ExportButton'
 import { searchSimilarStudies } from './services/pubmedService'
 import { trackSession, trackAnalysis } from './services/analyticsService'
+import { supabase } from './services/supabaseClient'
 
 function App() {
   const [results, setResults] = useState(null)
@@ -16,11 +17,56 @@ function App() {
   const [formData, setFormData] = useState(null)
   const [validationError, setValidationError] = useState(null)
   const [showFeedback, setShowFeedback] = useState(false)
+  const [user, setUser] = useState(null)
+  const [userProfile, setUserProfile] = useState(null)
+  const [savedRecommendationId, setSavedRecommendationId] = useState(null)
 
   // Track session on first load
   useEffect(() => {
     trackSession()
   }, [])
+
+  // Check if user is already logged in
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setUser(session.user)
+        fetchProfile(session.user.id)
+      }
+    })
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          setUser(session.user)
+          fetchProfile(session.user.id)
+        } else {
+          setUser(null)
+          setUserProfile(null)
+        }
+      }
+    )
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  // Fetch user profile from database
+  async function fetchProfile(userId) {
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single()
+    if (data) setUserProfile(data)
+  }
+
+  // Sign out function
+  async function handleSignOut() {
+    await supabase.auth.signOut()
+    setUser(null)
+    setUserProfile(null)
+  }
 
   async function handleResults(data, submittedFormData) {
 
@@ -31,10 +77,6 @@ function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
-    // Show feedback popup after 30 seconds
-setTimeout(() => {
-  setShowFeedback(true)
-}, 30000)
 
     // Clear any previous validation error
     setValidationError(null)
@@ -46,7 +88,28 @@ setTimeout(() => {
 
     window.scrollTo({ top: 0, behavior: 'smooth' })
 
-    // Fetch PubMed studies
+    // Save to database if user is logged in
+    if (user) {
+      try {
+        const { data: saved } = await supabase
+          .from('recommendations')
+          .insert({
+            user_id: user.id,
+            topic: submittedFormData.topic,
+            field: submittedFormData.field,
+            education_level: submittedFormData.educationLevel,
+            form_data: submittedFormData,
+            results: data,
+          })
+          .select()
+          .single()
+
+        if (saved) setSavedRecommendationId(saved.id)
+      } catch (err) {
+        console.error('Failed to save recommendation:', err)
+      }
+    }
+
     setStudiesLoading(true)
     try {
       const similarStudies = await searchSimilarStudies(
@@ -60,12 +123,17 @@ setTimeout(() => {
     } finally {
       setStudiesLoading(false)
     }
+
+    setTimeout(() => setShowFeedback(true), 30000)
   }
 
   return (
     <div className="min-h-screen bg-slate-50">
 
-      <Header />
+      <Header
+        user={userProfile}
+        onSignOut={handleSignOut}
+      />
 
       {/* Loading Screen */}
       {loading && (
