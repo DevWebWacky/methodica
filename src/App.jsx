@@ -5,10 +5,12 @@ import ResearchForm from './components/ResearchForm'
 import SimilarStudies from './components/SimilarStudies'
 import AnalyticsDashboard from './components/AnalyticsDashboard'
 import ExportButton from './components/ExportButton'
+import UserDashboard from './components/UserDashboard'
 import { searchSimilarStudies } from './services/pubmedService'
 import { trackSession, trackAnalysis } from './services/analyticsService'
 import { supabase } from './services/supabaseClient'
 import ChatPanel from './components/ChatPanel'
+
 
 function App() {
   const [results, setResults] = useState(null)
@@ -21,6 +23,7 @@ function App() {
   const [user, setUser] = useState(null)
   const [userProfile, setUserProfile] = useState(null)
   const [savedRecommendationId, setSavedRecommendationId] = useState(null)
+  const [showDashboard, setShowDashboard] = useState(false)
 
   // Track session on first load
   useEffect(() => {
@@ -67,6 +70,28 @@ function App() {
     await supabase.auth.signOut()
     setUser(null)
     setUserProfile(null)
+  }
+
+  function handleDashboard() {
+    setShowDashboard(true)
+  }
+
+  function handleCloseDashboard() {
+    setShowDashboard(false)
+  }
+
+  function handleViewRecommendation(rec) {
+    setResults(rec.results)
+    setFormData(rec.form_data)
+    setSavedRecommendationId(rec.id)
+  }
+
+  function handleViewSavedRecommendation(rec) {
+    setResults(rec.results)
+    setFormData(rec.form_data)
+    setSavedRecommendationId(rec.id)
+    setStudies([])
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   async function handleResults(data, submittedFormData) {
@@ -134,6 +159,7 @@ function App() {
       <Header
         user={userProfile}
         onSignOut={handleSignOut}
+        onDashboard={() => setShowDashboard(true)}
       />
 
       {/* Loading Screen */}
@@ -611,6 +637,15 @@ results.journals.length > 0 &&
 
   </div>
 )}
+
+      {/* User Dashboard */}
+      {showDashboard && (
+        <UserDashboard
+          user={user}
+          onViewRecommendation={handleViewSavedRecommendation}
+          onClose={() => setShowDashboard(false)}
+        />
+      )}
 
     </div>
 

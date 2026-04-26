@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import AuthModal from './AuthModal'
 
-function Header({ user, onSignOut }) {
+function Header({ user, onSignOut, onDashboard }) {
 
   const [showAuth, setShowAuth] = useState(false)
 
@@ -37,8 +37,15 @@ function Header({ user, onSignOut }) {
             {/* Auth buttons */}
             {user ? (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-300
-                hidden md:block">
+                <button
+                  onClick={onDashboard}
+                  className="bg-slate-700 hover:bg-slate-600
+                  text-white text-xs font-bold px-3 py-2
+                  rounded-full transition-all duration-300
+                  hidden md:block">
+                  📂 My Research
+                </button>
+                <span className="text-xs text-slate-300 hidden md:block">
                   👋 {user.username || user.email?.split('@')[0]}
                 </span>
                 <button
