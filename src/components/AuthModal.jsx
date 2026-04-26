@@ -102,7 +102,7 @@ function AuthModal({ onClose, onSuccess }) {
         {/* Logo */}
         <div className="text-center mb-6">
           <img
-            src="/auth-logo.png"
+            src="/authLogo.png"
             alt="Methodica"
             className="h-10 object-contain mx-auto mb-3"
           />
