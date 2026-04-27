@@ -3,11 +3,9 @@ import Header from './components/Header'
 import LandingHero from './components/LandingHero'
 import ResearchForm from './components/ResearchForm'
 import SimilarStudies from './components/SimilarStudies'
-import AnalyticsDashboard from './components/AnalyticsDashboard'
 import ExportButton from './components/ExportButton'
 import UserDashboard from './components/UserDashboard'
 import { searchSimilarStudies } from './services/pubmedService'
-import { trackSession, trackAnalysis } from './services/analyticsService'
 import { supabase } from './services/supabaseClient'
 import ChatPanel from './components/ChatPanel'
 
@@ -27,7 +25,6 @@ function App() {
 
   // Track session on first load
   useEffect(() => {
-    trackSession()
   }, [])
 
   // Check if user is already logged in
@@ -104,7 +101,6 @@ function App() {
     setFormData(submittedFormData)
 
     // Track this analysis
-    trackAnalysis(submittedFormData, data.studyDesign.recommendation)
 
     window.scrollTo({ top: 0, behavior: 'smooth' })
 
@@ -577,7 +573,6 @@ results.journals.length > 0 &&
             onResults={handleResults}
             setLoading={setLoading}
           />
-          <AnalyticsDashboard />
         </>
       )}
 
