@@ -215,7 +215,11 @@ Instructions:
         {/* Welcome message */}
         {messages.length === 0 && (
           <div className="text-center py-8">
-            <p className="text-3xl mb-2">🔬</p>
+            <img
+              src="/favicon.jpeg"
+              alt="Methodica"
+              className="h-10 w-10 object-contain mx-auto mb-2"
+            />
             <p className="text-sm font-bold text-slate-700 mb-1">
               Hi!! I'm your Methodica Assistant
             </p>

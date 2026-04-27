@@ -156,7 +156,11 @@ function App() {
       {loading && (
         <div className="fixed inset-0 bg-slate-900 bg-opacity-95
         z-50 flex flex-col items-center justify-center">
-          <div className="text-6xl mb-6 animate-bounce">🔬</div>
+          <img
+            src="/favicon.jpeg"
+            alt="Methodica"
+            className="h-16 w-16 object-contain mb-6 animate-bounce"
+          />
           <h2 className="text-white text-2xl font-black mb-2">
             Analysing Your Research...
           </h2>
