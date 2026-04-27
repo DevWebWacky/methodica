@@ -4,6 +4,7 @@ import AuthModal from './AuthModal'
 function Header({ user, onSignOut, onDashboard }) {
 
   const [showAuth, setShowAuth] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   return (
     <>
@@ -19,8 +20,8 @@ function Header({ user, onSignOut, onDashboard }) {
             className="h-12 md:h-16 object-contain"
           />
 
-          {/* Right side buttons */}
-          <div className="flex items-center gap-2 md:gap-3">
+          {/* Desktop buttons */}
+          <div className="hidden md:flex items-center gap-3">
 
             {/* Feedback button */}
             
@@ -29,23 +30,20 @@ function Header({ user, onSignOut, onDashboard }) {
               rel="noopener noreferrer"
               className="bg-slate-700 hover:bg-slate-600
               text-white text-xs font-bold px-3 py-2
-              rounded-full transition-all duration-300
-              hidden md:block">
+              rounded-full transition-all duration-300">
               💬 Feedback
             </a>
 
-            {/* Auth buttons */}
             {user ? (
               <div className="flex items-center gap-2">
                 <button
                   onClick={onDashboard}
                   className="bg-slate-700 hover:bg-slate-600
                   text-white text-xs font-bold px-3 py-2
-                  rounded-full transition-all duration-300
-                  hidden md:block">
+                  rounded-full transition-all duration-300">
                   📂 My Research
                 </button>
-                <span className="text-xs text-slate-300 hidden md:block">
+                <span className="text-xs text-slate-300">
                   👋 {user.username || user.email?.split('@')[0]}
                 </span>
                 <button
@@ -60,15 +58,106 @@ function Header({ user, onSignOut, onDashboard }) {
               <button
                 onClick={() => setShowAuth(true)}
                 className="bg-blue-600 hover:bg-blue-500
-                text-white text-xs md:text-sm font-bold
-                px-3 md:px-5 py-2 rounded-full
-                transition-all duration-300 hover:scale-105">
+                text-white text-sm font-bold px-5 py-2
+                rounded-full transition-all duration-300
+                hover:scale-105">
                 Sign In / Register
               </button>
             )}
 
           </div>
+
+          {/* Mobile hamburger button */}
+          <button
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="md:hidden flex flex-col gap-1.5
+            p-2 rounded-lg hover:bg-slate-700
+            transition-all duration-200">
+            <span className={`block w-6 h-0.5 bg-white
+            transition-all duration-300
+            ${showMobileMenu ? 'rotate-45 translate-y-2' : ''}`}>
+            </span>
+            <span className={`block w-6 h-0.5 bg-white
+            transition-all duration-300
+            ${showMobileMenu ? 'opacity-0' : ''}`}>
+            </span>
+            <span className={`block w-6 h-0.5 bg-white
+            transition-all duration-300
+            ${showMobileMenu ? '-rotate-45 -translate-y-2' : ''}`}>
+            </span>
+          </button>
+
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {showMobileMenu && (
+          <div className="md:hidden mt-3 pb-3 border-t
+          border-slate-700 pt-3 space-y-2">
+
+            {/* User greeting */}
+            {user && (
+              <p className="text-xs text-slate-300 px-2 pb-1">
+                👋 {user.username || user.email?.split('@')[0]}
+              </p>
+            )}
+
+            {/* My Research */}
+            {user && (
+              <button
+                onClick={() => {
+                  onDashboard()
+                  setShowMobileMenu(false)
+                }}
+                className="w-full text-left bg-slate-700
+                hover:bg-slate-600 text-white text-sm
+                font-bold px-4 py-3 rounded-xl
+                transition-all duration-200">
+                📂 My Research
+              </button>
+            )}
+
+            {/* Feedback */}
+            
+              <a href="https://forms.gle/27fcoWt1BtHfoDmn9"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setShowMobileMenu(false)}
+              className="block bg-slate-700 hover:bg-slate-600
+              text-white text-sm font-bold px-4 py-3
+              rounded-xl transition-all duration-200">
+              💬 Give Feedback
+            </a>
+
+            {/* Sign In or Sign Out */}
+            {user ? (
+              <button
+                onClick={() => {
+                  onSignOut()
+                  setShowMobileMenu(false)
+                }}
+                className="w-full text-left bg-red-900
+                hover:bg-red-800 text-white text-sm
+                font-bold px-4 py-3 rounded-xl
+                transition-all duration-200">
+                Sign Out
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setShowAuth(true)
+                  setShowMobileMenu(false)
+                }}
+                className="w-full text-left bg-blue-600
+                hover:bg-blue-500 text-white text-sm
+                font-bold px-4 py-3 rounded-xl
+                transition-all duration-200">
+                Sign In / Register
+              </button>
+            )}
+
+          </div>
+        )}
+
       </header>
 
       {/* Auth Modal */}
