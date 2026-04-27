@@ -14,11 +14,13 @@ function Header({ user, onSignOut, onDashboard }) {
         justify-between">
 
           {/* Logo */}
-          <img
-            src="/methodica-logo.png"
-            alt="Methodica Logo"
-            className="h-12 md:h-16 object-contain"
-          />
+          <a href="https://methodica-beta.vercel.app/">
+            <img
+              src="/methodica-logo.png"
+              alt="Methodica Logo"
+              className="h-12 md:h-16 object-contain"
+            />
+          </a>
 
           {/* Desktop buttons */}
           <div className="hidden md:flex items-center gap-3">
