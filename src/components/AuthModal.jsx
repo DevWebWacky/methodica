@@ -241,7 +241,7 @@ function AuthModal({ onClose, onSuccess }) {
             className="underline hover:text-gray-600">
             continue as guest
           </button>
-          {' '}— recommendations won't be saved
+          {' '}— recommendations and chat history won't be saved
         </p>
 
       </div>
